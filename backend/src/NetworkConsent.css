@@ -1,0 +1,36 @@
+.network-consent {
+  display: flex;
+  align-items: flex-start;
+  gap: 11px;
+  margin-top: 14px;
+  padding: 13px 15px;
+  border: 1px solid #2e353d;
+  border-radius: 9px;
+  background: #12161a;
+  color: #c5cbd0;
+  cursor: pointer;
+}
+
+.network-consent input {
+  width: 15px;
+  height: 15px;
+  margin: 2px 0 0;
+  accent-color: #b7a3ff;
+  flex: 0 0 auto;
+}
+
+.network-consent span {
+  display: grid;
+  gap: 4px;
+}
+
+.network-consent strong {
+  color: #e6e8e9;
+  font-size: 12px;
+}
+
+.network-consent small {
+  color: #858e97;
+  font-size: 11px;
+  line-height: 1.5;
+}

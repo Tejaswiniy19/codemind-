@@ -1,0 +1,47 @@
+.project-qa {
+  margin-top: 16px;
+  padding: 17px;
+  border: 1px solid #2b3237;
+  border-radius: 7px;
+  background: #111519;
+}
+
+.pqa-header { display: flex; align-items: center; gap: 11px; }
+.pqa-icon { width: 34px; height: 34px; display: grid; place-items: center; border-radius: 6px; color: #a9b9ff; background: #1b2031; }
+.pqa-header>div:nth-child(2) { min-width: 0; flex: 1; }
+.pqa-kicker { color: #8c9bce; font: 8px var(--mono); letter-spacing: .8px; }
+.pqa-header h2 { margin: 4px 0; color: #dbe1e4; font: 600 15px var(--display); }
+.pqa-header p { margin: 0; color: #848e95; font-size: 10px; }
+.pqa-model { color: #9ed5b7; font: 7px var(--mono); letter-spacing: .5px; }
+.pqa-form { margin-top: 15px; border: 1px solid #30373d; border-radius: 6px; background: #0d1013; }
+.pqa-form textarea { display: block; width: 100%; resize: vertical; min-height: 76px; padding: 11px; border: 0; outline: none; color: #e1e5e4; background: transparent; font: 11px/1.55 'DM Sans', sans-serif; }
+.pqa-form textarea::placeholder { color: #69737c; }
+.pqa-form-foot { display: flex; align-items: center; justify-content: space-between; gap: 8px; border-top: 1px solid #252b30; padding: 8px 10px; }
+.pqa-form-foot>span { color: #66717a; font: 8px var(--mono); }
+.pqa-form-foot button { display: flex; align-items: center; gap: 7px; border: 1px solid #62558c; border-radius: 4px; padding: 7px 9px; color: #ddd5ff; background: #29233a; font-size: 9px; cursor: pointer; }
+.pqa-form-foot button:disabled { opacity: .45; cursor: not-allowed; }
+.pqa-spin { animation: pqa-rotate 1s linear infinite; }
+@keyframes pqa-rotate { to { transform: rotate(360deg); } }
+.pqa-answer { margin-top: 13px; padding: 12px; border: 1px solid #2d3838; border-radius: 5px; background: #121a1a; }
+.pqa-answer-label { display: flex; align-items: center; gap: 6px; color: #93cdb3; font: 8px var(--mono); letter-spacing: .45px; }
+.pqa-answer>p { margin: 9px 0 0; color: #cbd3d1; font-size: 11px; line-height: 1.7; white-space: pre-wrap; overflow-wrap: anywhere; }
+.pqa-citations { display: grid; gap: 5px; margin-top: 12px; }
+.pqa-citations>strong { color: #8a969b; font: 8px var(--mono); letter-spacing: .5px; text-transform: uppercase; }
+.pqa-citations button { display: flex; align-items: center; gap: 9px; width: 100%; text-align: left; border: 1px solid #293139; border-radius: 4px; padding: 7px; color: #c6d0cf; background: #0e1215; cursor: pointer; }
+.pqa-citations button:hover { border-color: #586d65; }
+.pqa-citations code { flex: 1; color: #a4cbb3; font: 9px var(--mono); overflow-wrap: anywhere; }
+.pqa-citations span { color: #9ca7ab; font: 8px var(--mono); white-space: nowrap; }
+.pqa-citations svg { color: #75837c; }
+.pqa-source { margin-top: 10px; border: 1px solid #303a3b; border-radius: 5px; overflow: hidden; }
+.pqa-source>div { display: flex; align-items: center; gap: 5px; padding: 8px 10px; background: #171d20; color: #8f9a9c; font-size: 9px; }
+.pqa-source>div strong { color: #b7d3c3; font: 9px var(--mono); overflow-wrap: anywhere; }
+.pqa-source>div button { margin-left: auto; border: 0; color: #8e999d; background: transparent; font-size: 17px; cursor: pointer; }
+.pqa-source pre { max-height: 230px; overflow: auto; margin: 0; padding: 9px; color: #b9c2c0; background: #0b0e10; font: 9px/1.65 var(--mono); }
+.pqa-source pre i { display: inline-block; width: 36px; padding-right: 9px; color: #62716a; font-style: normal; text-align: right; user-select: none; }
+.pqa-disabled { display: flex; align-items: flex-start; gap: 8px; margin-top: 14px; padding: 11px; border: 1px solid #3a3a31; border-radius: 5px; color: #baa975; background: #1a1914; }
+.pqa-disabled svg { flex: 0 0 auto; margin-top: 1px; }
+.pqa-disabled p { margin: 0; font-size: 10px; line-height: 1.6; }
+.pqa-error { margin: 10px 0 0; color: #e5a7a0; font-size: 10px; }
+.pqa-privacy { display: flex; align-items: flex-start; gap: 6px; margin-top: 11px; color: #69757a; font-size: 8px; line-height: 1.5; }
+.pqa-privacy svg { flex: 0 0 auto; color: #708878; }
+@media (max-width: 640px) { .pqa-header { align-items: flex-start; flex-wrap: wrap; } .pqa-model { width: 100%; margin-left: 45px; } }
