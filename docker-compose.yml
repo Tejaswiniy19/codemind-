@@ -1,0 +1,95 @@
+services:
+  api:
+    build:
+      context: ./backend
+    restart: unless-stopped
+    environment:
+      CODEMIND_DATA_DIR: /data
+      CODEMIND_CORS_ORIGINS: http://localhost:5173
+      CODEMIND_REDIS_URL: redis://redis:6379/0
+      CODEMIND_COOKIE_SECURE: ${CODEMIND_COOKIE_SECURE:-false}
+      CODEMIND_SESSION_SECRET: ${CODEMIND_SESSION_SECRET:-}
+      CODEMIND_MAX_ARCHIVE_BYTES: ${CODEMIND_MAX_ARCHIVE_BYTES:-104857600}
+      CODEMIND_MAX_EXPANDED_BYTES: ${CODEMIND_MAX_EXPANDED_BYTES:-524288000}
+      CODEMIND_MAX_FILES: ${CODEMIND_MAX_FILES:-20000}
+      CODEMIND_MAX_SOURCE_PREVIEW_BYTES: ${CODEMIND_MAX_SOURCE_PREVIEW_BYTES:-524288}
+      CODEMIND_LLM_BASE_URL: ${CODEMIND_LLM_BASE_URL:-}
+      CODEMIND_LLM_MODEL: ${CODEMIND_LLM_MODEL:-}
+      CODEMIND_LLM_TIMEOUT_SECONDS: ${CODEMIND_LLM_TIMEOUT_SECONDS:-45}
+    volumes:
+      - codemind-data:/data
+      - ./backups:/backups
+    mem_limit: 1536m
+    cpus: 1.5
+    pids_limit: 128
+    security_opt:
+      - no-new-privileges:true
+    cap_drop:
+      - ALL
+    depends_on:
+      redis:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8000/api/health', timeout=3)"]
+      interval: 15s
+      timeout: 5s
+      retries: 5
+
+  worker:
+    build:
+      context: ./backend
+    command: ["celery", "-A", "app.tasks.celery_app", "worker", "--loglevel=INFO", "--concurrency=2"]
+    restart: unless-stopped
+    environment:
+      CODEMIND_DATA_DIR: /data
+      CODEMIND_REDIS_URL: redis://redis:6379/0
+      CODEMIND_MAX_ARCHIVE_BYTES: ${CODEMIND_MAX_ARCHIVE_BYTES:-104857600}
+      CODEMIND_MAX_EXPANDED_BYTES: ${CODEMIND_MAX_EXPANDED_BYTES:-524288000}
+      CODEMIND_MAX_FILES: ${CODEMIND_MAX_FILES:-20000}
+      CODEMIND_MAX_ANALYSIS_FILE_BYTES: ${CODEMIND_MAX_ANALYSIS_FILE_BYTES:-524288}
+      CODEMIND_MAX_TOTAL_ANALYSIS_BYTES: ${CODEMIND_MAX_TOTAL_ANALYSIS_BYTES:-67108864}
+      CODEMIND_MAX_ANALYSIS_FILES: ${CODEMIND_MAX_ANALYSIS_FILES:-20000}
+      CODEMIND_RUNNER_URL: ${CODEMIND_RUNNER_URL:-}
+      CODEMIND_RUNNER_TOKEN: ${CODEMIND_RUNNER_TOKEN:-}
+      CODEMIND_DEPLOYMENT_DOMAINS: ${CODEMIND_DEPLOYMENT_DOMAINS:-}
+    volumes:
+      - codemind-data:/data
+    mem_limit: 1g
+    cpus: 1.0
+    pids_limit: 128
+    security_opt:
+      - no-new-privileges:true
+    cap_drop:
+      - ALL
+    depends_on:
+      redis:
+        condition: service_healthy
+
+  redis:
+    image: redis:7-alpine
+    restart: unless-stopped
+    command: ["redis-server", "--appendonly", "yes", "--maxmemory", "256mb", "--maxmemory-policy", "noeviction"]
+    ports:
+      - "127.0.0.1:6379:6379"
+    volumes:
+      - codemind-redis:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 3s
+      retries: 5
+
+  web:
+    build:
+      context: ./frontend
+    restart: unless-stopped
+    ports:
+      - "${CODEMIND_BIND:-127.0.0.1}:8080:80"
+    depends_on:
+      api:
+        condition: service_healthy
+
+volumes:
+  codemind-data:
+    name: ${CODEMIND_DATA_VOLUME:-codemind_codemind-data}
+  codemind-redis:
